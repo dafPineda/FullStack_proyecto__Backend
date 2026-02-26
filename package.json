@@ -1,0 +1,30 @@
+{
+  "name": "fullstack_proyecto__backend",
+  "version": "1.0.0",
+  "description": "Backend-Proyecto",
+  "keywords": [
+    "node",
+    "express"
+  ],
+  "homepage": "https://github.com/dafPineda/FullStack_proyecto__Backend#readme",
+  "bugs": {
+    "url": "https://github.com/dafPineda/FullStack_proyecto__Backend/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dafPineda/FullStack_proyecto__Backend.git"
+  },
+  "license": "ISC",
+  "author": "Dafne Pineda",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
