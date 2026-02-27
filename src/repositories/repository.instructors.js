@@ -13,7 +13,7 @@ class RepositoryInstructors{
         )
         return [...peticion.rows]
     }
-    async getByid(id){
+    async getById(id){
         const peticion = await pool.query(
             'select id, name, mail, phone, turn, active from instructors where id = $1', [id]
         )
@@ -21,9 +21,9 @@ class RepositoryInstructors{
     }
     async create({name, mail, phone, turn='NA'}){
         const peticion = await pool.query(
-            `insert into instructors(name, mail, phone, turn) values($1, $2, $3, $4) returning id, name, turn`, [name, mail, phone, turn]
+            `insert into instructors(name, mail, phone, turn) values($1, $2, $3, $4) returning id, name, phone, mail turn`, [name, mail, phone, turn]
         )
-        return peticion.rows;
+        return peticion.rows[0];
     }
     async editById(id, {name, mail, phone, turn}){
         const peticion = await pool.query(
@@ -32,17 +32,9 @@ class RepositoryInstructors{
         return peticion.rows[0] || null;
     }
     async changeActive(id){
-        const active = await this.getByid(id)
-        let peticion = []
-        if(active.active){
-            peticion = await pool.query(
-                'update instructors set active=false where id = $1 returning id, name, phone, mail, active', [id]
+        const peticion = await pool.query(
+                `update instructors set active = not active where id = $1 returning id, name, phone, mail, active`, [id]
             )
-        }else{
-            peticion = await pool.query(
-                'update instructors set active=true where id = $1 returning id, name, phone, mail, active', [id]
-            )
-        }
         return peticion.rows[0] || null
     }
     async remove(id){

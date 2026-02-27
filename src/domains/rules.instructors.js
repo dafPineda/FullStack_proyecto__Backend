@@ -4,7 +4,7 @@ function createRules({name, mail, phone, turn}, instructors){
     if(!name  || !mail || !phone){
         return {error: "Bad request: nombre > 2, correo con @, telefono(10 digitos)"}
     }
-    if(name.length < 2 || mail.length < 3 || !mail.includes('@') || phone.length !== 10){
+    if(name.length < 2 || mail.length < 3 || !mail.includes('@') || phone.length !== 10 || !/^\d{10}$/.test(phone)){
             return {error: 'Bad request: nombre > 2, correo con @, telefono(10 digitos)'}
     }  
     if(turn){
@@ -12,18 +12,9 @@ function createRules({name, mail, phone, turn}, instructors){
             return {error:'turno(matutino/vespertino)'}
         }
     }
-    let duplicatePhone = false;
-    let duplicateMail = false;
-    instructors.forEach((ins)=>{
-        if(ins.mail === mail){
-            duplicatePhone = true
-            return
-        }
-        if(ins.phone === phone){
-            duplicateMail = true
-            return 
-        }
-    }) 
+    const duplicateMail = instructors.some(ins => ins.mail === mail)
+    const duplicatePhone = instructors.some(ins => ins.phone === phone)
+
     if(duplicatePhone){
         return {error: 'Telefono ya existente'}
     }
@@ -40,18 +31,9 @@ function editRules({name, mail, phone, turn}, instructors){
         return {error:'Telefono debe contener 10 digitos numericos'}
     }
     if(turn !== undefined && turn.toLowerCase() !== 'matutino' && turn.toLowerCase() !== 'vespertino') return {error:'Turno: Vespertino/Matutino'}
-    let duplicatePhone = false;
-    let duplicateMail = false;
-    instructors.forEach((ins)=>{
-        if(ins.mail === mail){
-            duplicateMail = true
-            return
-        }
-        if(ins.phone === phone){
-            duplicatePhone = true
-            return 
-        }
-    }) 
+    const duplicateMail = instructors.some(ins => ins.mail === mail)
+    const duplicatePhone = instructors.some(ins => ins.phone === phone)
+
     if(duplicateMail){
         return {error: 'Correo ya existente'}
     }
