@@ -7,11 +7,11 @@ function sign(payload){
 
 function authMiddleware(req, res, next){ 
     const header = req.headers.authorization 
-    if(!header) return res.status(401).json({error:"Falta Autorizacion"})
+    if(!header) return res.status(401).json({error:"You need authorization"})
 
     const [type, token] = header.split(' ');
 
-    if(type !== 'Bearer' || !token) return res.status(401).json({error:'Formato invalido'})
+    if(type !== 'Bearer' || !token) return res.status(401).json({error:'invalid format'})
     try{
         res.user = jwt.verify(token, SECRET)
         return next()

@@ -21,7 +21,7 @@ class RepositoryInstructors{
     }
     async create({name, mail, phone, turn='NA'}){
         const peticion = await pool.query(
-            `insert into instructors(name, mail, phone, turn) values($1, $2, $3, $4) returning id, name, phone, mail turn`, [name, mail, phone, turn]
+            `insert into instructors(name, mail, phone, turn) values($1, $2, $3, $4) returning id, name, phone, mail, turn`, [name, mail, phone, turn]
         )
         return peticion.rows[0];
     }

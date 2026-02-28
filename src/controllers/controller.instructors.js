@@ -18,23 +18,18 @@ async function getById(req, res){
 
         if(!peticion) return res.status(404).json({error:'Not Found'})
 
-        return res.status(200).json({peticion})
-    }catch(error){
-        console.log(error)
-        return res.status(500).json({ error: 'Internal Server Error' })
-    }
-}
-async function getAll(req, res){
-    try{
-        const peticion = await repo.getAll()
         return res.status(200).json(peticion)
     }catch(error){
         console.log(error)
         return res.status(500).json({ error: 'Internal Server Error' })
     }
 }
+async function getAll(req, res){
+        const peticion = await repo.getAll()
+        return res.status(200).json(peticion)
+}
 async function create(req, res){
-    try{
+        if(!req.body) return res.status(400).json({error:'Body null'})
         const {name, mail, phone, turn} = req.body
         const intructors = await repo.getAll();
         const validate = createRules({name, mail, phone, turn}, intructors);
@@ -43,13 +38,9 @@ async function create(req, res){
         const peticion = await repo.create(validate)
 
         return res.status(201).json(peticion)
-    }catch(error){
-        console.log(error)
-        return res.status(500).json({ error: 'Internal Server Error' })
-    }
 }
 async function edit(req, res){
-    try{
+        if(!req.body) return res.status(400).json({error:'Body null'})
         const id = Number(req.params.id);
         const {name, mail, phone, turn} = req.body
         const data = {
@@ -66,34 +57,21 @@ async function edit(req, res){
         if (!edit) return res.status(404).json({error: 'Not Found'})
 
         return res.status(200).json(edit)
-    }catch(error){
-        console.log(error)
-        return res.status(500).json({ error: 'Internal Server Error' })
-    }
 }
 async function changeActive(req, res){
-    try{
         const id = Number(req.params.id)
         const peticion = await repo.changeActive(id)
         if(!peticion) return res.status(404).json({error:'Not Found'})
         return res.status(200).json(peticion)
-    }catch(error){
-        console.log(error)
-        return res.status(500).json({ error: 'Internal Server Error' })
-    }
+
 }
 async function remove(req, res){
-    try{
         const id = Number(req.params.id)
         const peticion = await repo.remove(id)
         
         if(!peticion) return res.status(404).json({error: 'Not Found'})
         
         return res.status(204).json({Removed: peticion})
-    }catch(error){
-        console.log(error)
-        return res.status(500).json({ error: 'Internal Server Error' })
-    }
 }
 
 module.exports = { getAll, create, edit, getActive, remove, changeActive, getById}
