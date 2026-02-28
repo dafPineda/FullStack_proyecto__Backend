@@ -16,7 +16,7 @@ const limiter = rateLimit({
 const allowed = [
   'http://localhost:3000',
   'http://localhost:3001',
-  'https://fullstack-proyecto-backend.onrender.com'
+  'full-stack-proyecto-front-end.vercel.app'
 ]
 
 app.get('/', (req, res)=>{
