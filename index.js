@@ -13,11 +13,11 @@ const limiter = rateLimit({
   message: 'Too many requests. Try again later.'
 });
 
-const allowed = [
+/* const allowed = [
   'http://localhost:3000',
   'http://localhost:3001',
   'http://full-stack-proyecto-front-end.vercel.app'
-]
+] */
 
 app.get('/', (req, res)=>{
   res.json({ok:true, service:'API OK'})
@@ -27,16 +27,18 @@ app.get('/health', (req, res) => {
 })
 
 app.use(limiter);
-app.use(cors({
-  origin: function (origin, cb) {
-    if (!origin) return cb(null, true);
-    if (allowed.includes(origin)) return cb(null, true);
-    return cb(new Error('CORS bloqueado: ' + origin));
-  },
+const corsOptions = {
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'https://full-stack-proyecto-front-end.vercel.app'
+  ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
-}));
-app.options('*', cors());
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 app.use(express.json())
 app.use('/instructors', instructorsRouter)
 app.use('/users', usersRouter)
