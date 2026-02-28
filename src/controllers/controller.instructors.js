@@ -3,26 +3,16 @@ const repo = new RepositoryInstructors();
 const {createRules, editRules} = require('../domains/rules.instructors');
 
 async function getActive(req, res){
-    try{
         const peticion = await repo.getActive()
         return res.status(200).json(peticion)
-    }catch(error){
-        console.log(error)
-        return res.status(500).json({ error: 'Internal Server Error' })
-    }
 }
 async function getById(req, res){
-    try{
         const id = Number(req.params.id)
         const peticion = await repo.getById(id)
 
         if(!peticion) return res.status(404).json({error:'Not Found'})
 
         return res.status(200).json(peticion)
-    }catch(error){
-        console.log(error)
-        return res.status(500).json({ error: 'Internal Server Error' })
-    }
 }
 async function getAll(req, res){
         const peticion = await repo.getAll()
@@ -73,5 +63,16 @@ async function remove(req, res){
         
         return res.status(204).json({Removed: peticion})
 }
+async function getPaginated(req, res) {
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
 
-module.exports = { getAll, create, edit, getActive, remove, changeActive, getById}
+        if (isNaN(page) || isNaN(limit)) {
+            return res.status(400).json({ error: "Parámetros inválidos" });
+        }
+        const result = await repo.getPaginated(page, limit);
+
+        return res.json(result);
+}
+
+module.exports = { getAll, create, edit, getActive, remove, changeActive, getById, getPaginated}

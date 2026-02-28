@@ -43,6 +43,17 @@ class RepositoryInstructors{
         )
         return peticion.rows[0];
     }
+    async getPaginated(page = 1, limit = 10) {
+        const offset = (page - 1) * limit;
+        const peticion = await pool.query(
+            'SELECT id, name, mail, phone, turn, active from instructors order by id limit $1 offset $2',
+            [limit, offset]
+        )
+        const countResult = await pool.query('select count(*) from instructors');
+        const total = parseInt(countResult.rows[0].count, 10);
+
+        return {total, page, limit, data: peticion.rows};
+    }
 }
 
 module.exports = { RepositoryInstructors }

@@ -5,6 +5,7 @@ const app = express()
 const PORT = process.env.PORT || 3001
 const {router: instructorsRouter} = require('./src/routes/route.instructors')
 const {router: usersRouter} = require('./src/routes/route.users')
+const {router: excersiceRouter} = require('./src/routes/route.excersice')
 const { errorHandler } = require('./src/middleware/errorMiddleware')
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -14,8 +15,8 @@ const limiter = rateLimit({
 
 const allowed = [
   'http://localhost:3000',
-  'http://localhost:3001'
-  //,ruta de vercel
+  'http://localhost:3001',
+  'https://fullstack-proyecto-backend.onrender.com'
 ]
 
 app.get('/', (req, res)=>{
@@ -28,7 +29,8 @@ app.get('/health', (req, res) => {
 app.use(express.json())
 app.use('/instructors', instructorsRouter)
 app.use('/users', usersRouter)
-//app.use(errorHandler)
+app.use('/excersice', excersiceRouter)
+app.use(errorHandler)
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);
   next();
