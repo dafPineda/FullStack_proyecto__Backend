@@ -26,6 +26,13 @@ app.get('/health', (req, res) => {
   res.json({ok:true, service:'api'})
 })
 
+app.use(cors({
+  origin: function (origin, cb) {
+    if (!origin) return cb(null, true); // Postman
+    if (allowed.includes(origin)) return cb(null, true);
+    return cb(new Error('CORS bloqueado: ' + origin));
+  }
+}));
 app.use(express.json())
 app.use('/instructors', instructorsRouter)
 app.use('/users', usersRouter)
@@ -35,13 +42,6 @@ app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);
   next();
 });
-app.use(cors({
-  origin: function (origin, cb) {
-    if (!origin) return cb(null, true); // Postman
-    if (allowed.includes(origin)) return cb(null, true);
-    return cb(new Error('CORS bloqueado: ' + origin));
-  }
-}));
 app.use(limiter);
 
 app.listen(PORT,()=>{
