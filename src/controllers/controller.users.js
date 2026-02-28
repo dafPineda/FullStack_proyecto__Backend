@@ -1,21 +1,20 @@
 const bcrypt = require('bcryptjs')
 const { RepositoryUsers } = require("../repositories/repository.user")
-const { signupRules, loginRules } = require('../domains/rules.users')
 const {sign} = require('../auth')
 
 const repo = new RepositoryUsers();
 
 async function create(req, res){
-
         if(!req.body) return res.status(400).json({error:'Body null'})
-        
         const {email, password, role} = req.body;
-        const validate = await signupRules(email, password, role, repo.findByEmail)
 
-        if(validate.error) return res.status(404).json(validate.error)
+        const duplicateUser = await repo.findByEmail(email);
+        if (duplicateUser) {
+        return res.status(400).json({error: "Email already exists"});
+        }
 
         const passwordHash = await bcrypt.hash(password, 8)    
-        const user = await repo.create(email, passwordHash, role)
+        const user = await repo.create({email, passwordHash, role})
 
         if(!user) return res.status(400).json({error:"Not created"})
 
@@ -23,18 +22,16 @@ async function create(req, res){
 }
 async function logInUser(req, res) {
         if(!req.body) return res.status(400).json({error:'Body null'})
-        const { email, password } = req.body
-        const isValidate = loginRules(email, password)
-        if(isValidate.error) return res.status(404).json({error: isValidate.error})
+
+        const { email, password, role} = req.body
+  
         const user = await repo.findByEmail(email)
-      
         if(!user) return res.status(401).json({error:'incorrect credentials'})
           const ok = await bcrypt.compare(password, user.password_hash) 
       
           if(!ok){
               return res.status(401).json({error:'incorrect credentials'})
           }
-      
           const token = sign({
               id: user.id,
               email: user.email,
