@@ -16,7 +16,7 @@ const limiter = rateLimit({
 const allowed = [
   'http://localhost:3000',
   'http://localhost:3001',
-  'full-stack-proyecto-front-end.vercel.app'
+  'http://full-stack-proyecto-front-end.vercel.app'
 ]
 
 app.get('/', (req, res)=>{
@@ -26,13 +26,17 @@ app.get('/health', (req, res) => {
   res.json({ok:true, service:'api'})
 })
 
+app.use(limiter);
 app.use(cors({
   origin: function (origin, cb) {
-    if (!origin) return cb(null, true); // Postman
+    if (!origin) return cb(null, true);
     if (allowed.includes(origin)) return cb(null, true);
     return cb(new Error('CORS bloqueado: ' + origin));
-  }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 }));
+app.options('*', cors());
 app.use(express.json())
 app.use('/instructors', instructorsRouter)
 app.use('/users', usersRouter)
@@ -42,7 +46,6 @@ app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);
   next();
 });
-app.use(limiter);
 
 app.listen(PORT,()=>{
     console.log(`http://localhost:${PORT}`)
