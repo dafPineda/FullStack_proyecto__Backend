@@ -10,10 +10,10 @@ router.get('/:id', controller.getById)
 
 router.post('/create', authMiddleware, requireRole('admin'), controller.create)
 
-router.put('/:id', controller.edit)
-router.put('/active/:id', controller.changeActive)
+router.put('/:id',authMiddleware, requireRole('admin'), controller.edit)
+router.put('/active/:id', authMiddleware, requireRole('admin'), controller.changeActive)
 
-router.delete('/:id', controller.remove)
+router.delete('/:id', authMiddleware, requireRole('admin'), controller.remove)
 
 
 module.exports = {router} 

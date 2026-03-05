@@ -13,12 +13,6 @@ const limiter = rateLimit({
   message: 'Too many requests. Try again later.'
 });
 
-/* const allowed = [
-  'http://localhost:3000',
-  'http://localhost:3001',
-  'http://full-stack-proyecto-front-end.vercel.app'
-] */
-
 app.get('/', (req, res)=>{
   res.json({ok:true, service:'API OK'})
 })

@@ -32,6 +32,7 @@ async function logInUser(req, res) {
           if(!ok){
               return res.status(401).json({error:'incorrect credentials'})
           }
+          
           const token = sign({
               id: user.id,
               email: user.email,
