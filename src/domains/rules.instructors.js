@@ -1,5 +1,3 @@
-const { error } = require("node:console");
-
 function createRules({name, mail, phone, turn}, instructors){
     if(!name  || !mail || !phone){
         return {error: "Bad request: nombre > 2, correo con @, telefono(10 digitos)"}
@@ -24,12 +22,12 @@ function createRules({name, mail, phone, turn}, instructors){
     return {name, mail, phone, turn}
 }
 function editRules({name, mail, phone, turn}, instructors){
-    if((name !== undefined || name !== "") && name.length < 2) return {error:'Nombre invalidado'}
-    if((mail !== undefined || mail !== "") && (typeof mail !== 'string' || !mail.includes('@')|| mail.length < 3 )) return {error:'Correo invalido'}
-    if((phone !== undefined || phone !== "") && (phone.length !== 10 || !/^\d{10}$/.test(phone))) {
+    if((name !== undefined && name !== "") && name.length < 2) return {error:'Nombre invalidado'}
+    if((mail !== undefined && mail !== "") && (typeof mail !== 'string' || !mail.includes('@')|| mail.length < 3 )) return {error:'Correo invalido'}
+    if((phone !== undefined && phone !== "") && (phone.length !== 10 || !/^\d{10}$/.test(phone))) {
         return {error:'Telefono debe contener 10 digitos numericos'}
     }
-    if((turn !== undefined || turn !== "") && turn.toLowerCase() !== 'matutino' && turn.toLowerCase() !== 'vespertino') return {error:'Turno: Vespertino/Matutino'}
+    if((turn !== undefined && turn !== "") && turn.toLowerCase() !== 'matutino' && turn.toLowerCase() !== 'vespertino') return {error:'Turno: Vespertino/Matutino'}
     const duplicateMail = instructors.some(ins => ins.mail === mail)
     const duplicatePhone = instructors.some(ins => ins.phone === phone)
 

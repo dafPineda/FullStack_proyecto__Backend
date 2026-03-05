@@ -34,10 +34,10 @@ async function edit(req, res){
         const id = Number(req.params.id);
         const {name, mail, phone, turn} = req.body
         const data = {
-            name: name !== undefined ? name : undefined,
-            mail: mail !== undefined ? mail : undefined,
-            phone:phone   !== undefined ? phone : undefined, 
-            turn: turn !== undefined ? turn: undefined
+            name: name !== undefined && name !== '' ? name : undefined,
+            mail: mail !== undefined && mail !== '' ? mail : undefined,
+            phone:phone   !== undefined && phone !== '' ? phone : undefined, 
+            turn: turn !== undefined && turn !== '' ? turn: undefined
         }
         const instructors = await repo.getAll();
         const peticion = editRules(data, instructors)
